@@ -4,10 +4,13 @@ import styles from './Bank.module.css';
 import simple_token_abi from './Contracts/bank_app_abi.json';
 import Interactions from './Interactions';
 
+//functionalities : Create Account | Check Account Status | Deposit Money | Withdraw Money | Loan Calculator | Currency Converter
+
 const BankApp = () => {
   // deploy simple token contract and paste deployed contract address here. This value is local ganache chain
-  let contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  let contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
+  // created State variables
   const [errorMessage, setErrorMessage] = useState(null);
   const [defaultAccount, setDefaultAccount] = useState(null);
   const [connButtonText, setConnButtonText] = useState('Connect Wallet');
@@ -29,6 +32,7 @@ const BankApp = () => {
   const [rupeesAmount, setRupeesAmount] = useState('');
   const [dollarAmount, setDollarAmount] = useState('');
 
+  // Function to handle wallet connection
   const connectWalletHandler = () => {
     if (window.ethereum && window.ethereum.isMetaMask) {
       window.ethereum
@@ -46,22 +50,25 @@ const BankApp = () => {
     }
   };
 
-  // update account, will cause component re-render
+  // Function to handle account change
   const accountChangedHandler = (newAccount) => {
     setDefaultAccount(newAccount);
     updateEthers();
   };
 
+  // Function to handle chain change
   const chainChangedHandler = () => {
     // reload the page to avoid any errors with chain change mid use of application
     window.location.reload();
   };
 
-  // listen for account changes
+   // Listen for account changes
   window.ethereum.on('accountsChanged', accountChangedHandler);
 
+  // Listen for chain changes
   window.ethereum.on('chainChanged', chainChangedHandler);
 
+  // Update ethers provider, signer, and contract
   const updateEthers = () => {
     let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(tempProvider);
@@ -73,12 +80,14 @@ const BankApp = () => {
     setContract(tempContract);
   };
 
+   // Function to create a bank account
   const createAccount = async () => {
     let txt = await contract.createAcc();
     console.log(txt);
     setAccStatus('Your Account is created');
   };
 
+  // Function to check if an account exists
   const checkAccountExists = async () => {
     let txt = await contract.accountExists();
     if (txt == true) {
@@ -86,6 +95,7 @@ const BankApp = () => {
     }
   };
 
+  // Function to get the account balance
   const AccountBalance = async () => {
     let txt = await contract.accountBalance();
     let balanceNumber = txt.toNumber();
@@ -93,6 +103,7 @@ const BankApp = () => {
     setAccBalance('' + balanceNumber);
   };
 
+  // Function to deposit money into the account
   const DepositBalance = async (e) => {
     e.preventDefault();
     let depositAmount = e.target.depositAmount.value;
@@ -101,6 +112,7 @@ const BankApp = () => {
     });
   };
 
+  // Function to withdraw money from the account
   const WithdrawBalance = async (e) => {
     e.preventDefault();
     let withdrawAmount = e.target.withdrawAmount.value;
@@ -108,6 +120,7 @@ const BankApp = () => {
     console.log(txt);
   };
 
+   // Function to calculate the monthly payment for a loan
   const calculateMonthlyPayment = () => {
     const principal = parseFloat(loanAmount);
     const interestRate = parseFloat(interestPercentage) / 100;
@@ -123,15 +136,18 @@ const BankApp = () => {
     setMonthlyPayment(monthlyPayment);
   };
 
+  // Function to convert rupees to dollars
   const convertToDollar = () => {
     const rupees = parseFloat(rupeesAmount);
     const dollar = rupees / 75; // Assuming 1 dollar is equal to 75 rupees
     setDollarAmount(dollar.toFixed(2));
   };
 
+  //returns JSX Markup that represents UI of the this MoneyVerse App
   return (
     <div>
-      <h2>Bank Dapp- Create Account, Check Account, Check Balance, Deposit, and Loan Calculator</h2>
+      <h2>MoneyVerse: Empowering Your Financial Journey</h2>
+      <h3>Create Account | Check Account Status | Deposit Money | Withdraw Money | Loan Calculator | Currency Converter</h3>
       <button className={styles.button6} onClick={connectWalletHandler}>
         {connButtonText}
       </button>
@@ -143,18 +159,18 @@ const BankApp = () => {
 
         <div>
           <button onClick={AccountBalance}>Account Balance</button>{' '}
-          <h3>Balance in the Bank: {accbalance} </h3>
+          <h3>Bank Balance: {accbalance} </h3>
         </div>
 
         {errorMessage}
       </div>
       <div className={styles.interactionsCard}>
         <div>
-          <h4>Click here to Create your account. Make sure you are connected to Wallet</h4>
+          <h4>New User? Click to Create Account</h4>
           <button onClick={createAccount}>Create Account</button>
-          <h4>Click here to check if your account Exists or not</h4>
-          <button onClick={checkAccountExists}>Check Account Exists</button>
-          <h4>Your Account Status</h4> <h5> {checkAcc}</h5>
+          <h4>Check account status</h4>
+          <button onClick={checkAccountExists}>Account Status?</button>
+          <h4>Account Status:</h4> <h5> {checkAcc}</h5>
         </div>
         <form onSubmit={DepositBalance}>
           <h3> Deposit Money </h3>
@@ -202,14 +218,14 @@ const BankApp = () => {
         <div>
           <h3>Convert Rupees to Dollar</h3>
           <form>
-            <p>Rupees Amount</p>
+            <p>Enter Amount in Rupees</p>
             <input type="number" id="rupeesAmount" value={rupeesAmount} onChange={(e) => setRupeesAmount(e.target.value)} />
             <button type="button" onClick={convertToDollar} className={styles.button6}>
               Convert
             </button>
           </form>
           <div>
-            {dollarAmount && <h4>Dollar Amount: {dollarAmount}</h4>}
+            {dollarAmount && <h4>Amount in dollar: {dollarAmount}</h4>}
           </div>
         </div>
       </div>
