@@ -1,71 +1,43 @@
-# Steps to run the codebase 
+# MoneyVerse
 
-$ npm install
-$ npm start
+MoneyVerse is a decentralized banking application that empowers your financial journey. It allows you to create an account, check account status, deposit and withdraw money, calculate loan payments, and convert currency. The application is built on the Ethereum blockchain and requires a connected Ethereum wallet (such as MetaMask) to interact with the blockchain.
 
-navigate browser to localhost:3000
+## Features
 
------------------------------
-## Tech Stack
+- Create Account: Click on the "Create Account" button to create a new bank account.
+- Check Account Status: Click on the "Account Status?" button to check if your account exists.
+- Deposit Money: Enter the amount you want to deposit and click the "Deposit" button.
+- Withdraw Money: Enter the amount you want to withdraw and click the "Withdraw" button.
+- Loan Calculator: Enter the loan amount, duration in years, and interest percentage to calculate the monthly payment.
+- Currency Converter: Enter the amount in Rupees to convert it to Dollars.
 
-React Js
-Solidity
+## Installation
 
-## Available Scripts
+1. Clone the repository: `git clone <repository-url>`
+2. Install dependencies: `npm install`
 
-In the project directory, you can run:
+## Usage
 
-### `npm start`
+1. Start the application: `npm start`
+2. Connect your Ethereum wallet (such as MetaMask).
+3. Click on the different buttons to perform the desired actions.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Configuration
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Deploy the Simple Token contract and copy the deployed contract address.
+2. Replace the `contractAddress` variable in the `BankApp.js` file with the deployed contract address.
+3. Update the ABI in the `simple_token_abi.json` file with the correct ABI of your deployed contract.
 
-### `npm run build`
+## Built With
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- React: A JavaScript library for building user interfaces.
+- ethers.js: A library for interacting with Ethereum.
+- Web3.js: A library for connecting to the Ethereum blockchain.
 
-# Structure of files in the codebase
+## Contributing
 
-src Folder -
-    Contracts - 
-        BankApp.sol - You can view the smartcontract used in this code 
-        bank_app_abi.json - The abi file of the smartcontract.
+Contributions are welcome! Please open an issue or submit a pull request for any changes or enhancements you'd like to make.
 
-The smart contract is deployed on Test BSC Network.
+## License
 
-### Contract Address - 0x59eFE99aA926a79edEA31F7ED3b2661b1F9e2F62
-
-## Flow of smart contract
-
-1.Firstly connect your wallet by clicking on connectwallet button(Make sure you have test BNB in your wallet).
-2.You need to create the account by clicking on createAccount  button
-3.You can check whether your account is listed in the network by clicking on checkAccountExists Button
-4.Next you can deposit the balance into your account by entering the number in the textbox.
-5.You can check the balance in the bank account using Account Balance button.
-6.You can transfer your funds in the bank account to another bank account(Make sure that account is also listed in the network)
-7.You can withdraw funds using Withdraw button.
-
-
-
-## In App.js you can find all these functions
-
-connectWalletHandler - For connecting the metamask wallet
-AccoutChangedHandler - Chainging account from metamask can cause this function to work
-chainChangedHandler - Chainging the chain network in the metamask can cause this function to work
-updateEthers - This function helps in communicating with the abi,deployed smart contract and the provider network of the metamask
-
-### `let tempProvider = new ethers.providers.Web3Provider(window.ethereum);`
-###	`let tempSigner = tempProvider.getSigner();`
-### `let tempContract = new ethers.Contract(contractAddress, simple_token_abi, tempSigner)` - These are the steps for integrating Smartcontract with the Frontend.
-
-createAccount - Creates the Account in the Bank Dapp
-checkAccountExists - Checks if the Account is listed in the Dapp
-AccountBalance - Checks the balance of the account in the Bank
-DepositBalance - For depositing the balance from your metamask wallet account to bank account
-WithdrawBalance - For Withdrawing the balance from your bank account to metamask wallet address 
-TransferHandler -For transferring the funds between accounts in the bank. Make sure both the banks are listed in the network.
-
+This project is licensed under the [MIT License](LICENSE).
